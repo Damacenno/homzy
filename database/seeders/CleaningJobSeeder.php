@@ -48,6 +48,21 @@ class CleaningJobSeeder extends Seeder
                     'task' => 'Lavar panos de prato',
                     'importance_level' => 3,
                     'is_required' => true
+                ],
+                [
+                    'task' => 'Lavar panos de prato',
+                    'importance_level' => 3,
+                    'is_required' => true
+                ],
+                [
+                    'task' => 'Lavar panos de prato',
+                    'importance_level' => 3,
+                    'is_required' => true
+                ],
+                [
+                    'task' => 'Lavar panos de prato',
+                    'importance_level' => 3,
+                    'is_required' => true
                 ]
             ]
         ]);

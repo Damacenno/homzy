@@ -19,4 +19,9 @@ class JobApplication extends Model
     {
         return $this->belongsTo(CleaningJob::class, 'job_id');
     }
+
+    public function cleaner()
+    {
+        return $this->belongsTo(User::class, 'cleaner_id');
+    }
 }

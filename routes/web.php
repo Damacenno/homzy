@@ -27,7 +27,7 @@ Route::get('/jobdetails/{id}', function ($id) {
     $job = CleaningJob::with([
         'property.owner',
         'status',
-        'applications'
+        'applications.cleaner'
     ])->findOrFail($id);
 
     return view('job-details', compact('job'));

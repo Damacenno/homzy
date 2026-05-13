@@ -54,6 +54,7 @@ class DatabaseSeeder extends Seeder
             CleaningJobSeeder::class,
             JobStatusSeeder::class,
             UserTypeSeeder::class,
+            JobApplicationSeeder::class
         ]);
     }
 }
