@@ -6,18 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 
-Route::get('/', function (Request $request) {
-    $OfferJobs = JobController::getHomePageJobsOffers($request->get('filter'));
-    
-    if (auth()->check()) {
-        $userJobs = JobController::getLoggedUserScheduledJobs();
-        $stats = JobController::getLoggedUserStats();
-        
-        return view('home', compact('OfferJobs', 'userJobs', 'stats'));
-    }
-    
-    return view('home', compact('OfferJobs'));
-})->name('home');
+Route::get('/', [JobController::class, 'index'])->name('home');
 
 Route::get('/login-page', function () {
     return view('login-page');

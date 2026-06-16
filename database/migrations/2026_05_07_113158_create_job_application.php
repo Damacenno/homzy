@@ -17,7 +17,7 @@ return new class extends Migration
             $table->integer('job_id');
             $table->integer('cleaner_id')->nullable();
             $table->integer('applicant_id')->nullable();
-            $table->string('status')->default('pending');
+            $table->string('status')->default('PENDING')->capitalized();
             $table->text('message')->nullable();
             $table->timestamps();
         });

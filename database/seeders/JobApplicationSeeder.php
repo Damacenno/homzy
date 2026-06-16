@@ -17,7 +17,7 @@ class JobApplicationSeeder extends Seeder
             'cleaner_id' => 2,
             'job_id' => 1,
             'application_type' => 'cleaner',
-            'status' => 'pending',
+            'status' => 'PENDING',
             'message' => 'Break it down, back it up'
         ]);
 
@@ -25,7 +25,7 @@ class JobApplicationSeeder extends Seeder
             'cleaner_id' => 3,
             'job_id' => 1,
             'application_type' => 'cleaner',
-            'status' => 'pending',
+            'status' => 'PENDING',
             'message' => 'For what it is'
         ]);
     }

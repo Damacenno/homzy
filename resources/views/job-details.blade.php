@@ -70,8 +70,7 @@
                                 class="flex items-center gap-3 p-3 border-2 border-black bg-gray-50 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] relative overflow-hidden">
 
                                 <!-- Checkbox  -->
-                                <div
-                                    class="w-6 h-6 border-2 border-black flex-shrink-0 bg-white flex items-center justify-center">
+                                <div class="w-6 h-6 border-2 border-black flex-shrink-0 bg-white flex items-center justify-center">
                                     @if ($task['is_required'])
                                         <div class="w-3 h-3 bg-red-500"></div>
                                     @else
@@ -146,21 +145,22 @@
                         </p>
                         <p class="text-[10px] font-black uppercase text-gray-500">Hora mínima de chegada</p>
                         <p class="text-xs font-black">
-                            {{ \Carbon\Carbon::parse($job->scheduled_arrival_time_minimum)->format('H:i') }}</p>
+                            {{ \Carbon\Carbon::parse($job->scheduled_arrival_time_minimum)->format('H:i') }}
+                        </p>
                     </div>
 
                     @if (Auth::check())
-                        
+
                         @if ($job->cleaner_user_id === auth()->id())
-                            <div
-                                class="bg-green-500 text-white p-3 border-2 border-black text-center font-black uppercase text-xs">
-                                VOCÊ É O RESPONSÁVEL 🧹
+                            <div class="bg-green-500 text-white p-3 border-2 border-black text-center font-black uppercase text-xs">
+                                Você é o Responsável para este trabalho
                             </div>
-
-                            <div
-                                class="bg-blue-500 text-white p-3 border-2 border-black text-center font-black uppercase text-xs">
-
-                            </div>
+                            @if (now()->toDateString() === $job->scheduled_date->toDateString())
+                                <button onclick="manageJob({{ $job->id }})"
+                                    class="w-full py-3 bg-blue-500 text-white border-4 border-black font-black uppercase text-sm shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-y-1 hover:shadow-none transition-all">
+                                    INICIAR TRABALHO
+                                </button>
+                            @endif
                         @elseif($job->property->owner_user_id === auth()->id())
                             <button onclick="manageJob({{ $job->id }})"
                                 class="w-full py-3 bg-blue-500 text-white border-4 border-black font-black uppercase text-sm shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-y-1 hover:shadow-none transition-all">
@@ -200,58 +200,59 @@
             if (applications.length > 0) {
                 applications.forEach(application => {
                     const cleanerName = application.cleaner ? application.cleaner.name : 'Candidato Desconhecido';
-                    const statusColor = application.status === 'pending' ? 'bg-yellow-400' : 'bg-green-400';
+                    const statusColor = application.status === 'PENDING' ? 'bg-yellow-400' : 'bg-green-400';
+                    const statusName = application.status === 'PENDING' ? 'Pendente' : (application.status === 'ACCEPTED' ? 'Aceito' : 'Rejeitado');
 
                     applicationsHtml += `
-                    <div class="border-4 border-black bg-white p-4 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] mb-4">
-                        <div class="flex justify-between items-start mb-3">
-                            <div>
-                                <h4 class="font-black uppercase text-lg leading-tight">${cleanerName}</h4>
-                                <p class="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Status: ${application.status}</p>
-                            </div>
-                            <div class="w-10 h-10 border-2 border-black bg-purple-400 flex items-center justify-center font-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
-                                ${cleanerName.charAt(0)}
-                            </div>
-                        </div>
+                                        <div class="border-4 border-black bg-white p-4 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] mb-4">
+                                            <div class="flex justify-between items-start mb-3">
+                                                <div>
+                                                    <h4 class="font-black uppercase text-lg leading-tight">${cleanerName}</h4>
+                                                    <p class="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Status: ${statusName}</p>
+                                                </div>
+                                                <div class="w-10 h-10 border-2 border-black bg-purple-400 flex items-center justify-center font-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+                                                    ${cleanerName.charAt(0)}
+                                                </div>
+                                            </div>
 
-                        <div class="bg-gray-100 border-2 border-black p-3 mb-4 shadow-[inset_2px_2px_0px_0px_rgba(0,0,0,1)]">
-                            <p class="text-xs font-bold italic text-gray-700">
-                                "${application.message || 'O candidato não enviou uma mensagem.'}"
-                            </p>
-                        </div>
+                                            <div class="bg-gray-100 border-2 border-black p-3 mb-4 shadow-[inset_2px_2px_0px_0px_rgba(0,0,0,1)]">
+                                                <p class="text-xs font-bold italic text-gray-700">
+                                                    "${application.message || 'O candidato não enviou uma mensagem.'}"
+                                                </p>
+                                            </div>
 
-                        <div class="grid grid-cols-2 gap-3">
-                            <form action="/accept-application/${application.id}" method="POST">
-                                <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                                <button type="submit" class="w-full py-2 bg-green-500 border-2 border-black font-black uppercase text-xs shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all cursor-pointer">
-                                    Aceitar
-                                </button>
-                            </form>
-                            <form action="/reject-application/${application.id}" method="POST">
-                                <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                                <button type="submit" class="w-full py-2 bg-red-500 border-2 border-black font-black uppercase text-xs shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all cursor-pointer text-white">
-                                    Recusar
-                                </button>
-                            </form>
-                        </div>
-                    </div>
-                `;
+                                            <div class="grid grid-cols-2 gap-3">
+                                                <form action="/accept-application/${application.id}" method="POST">
+                                                    <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                                                    <button type="submit" class="w-full py-2 bg-green-500 border-2 border-black font-black uppercase text-xs shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all cursor-pointer">
+                                                        Aceitar
+                                                    </button>
+                                                </form>
+                                                <form action="/reject-application/${application.id}" method="POST">
+                                                    <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                                                    <button type="submit" class="w-full py-2 bg-red-500 border-2 border-black font-black uppercase text-xs shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all cursor-pointer text-white">
+                                                        Recusar
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    `;
                 });
             } else {
                 applicationsHtml = `
-                <div class="border-4 border-dashed border-black p-8 text-center bg-gray-50">
-                    <p class="font-black uppercase text-gray-400 italic">Nenhuma candidatura recebida ainda.</p>
-                </div>
-            `;
+                                    <div class="border-4 border-dashed border-black p-8 text-center bg-gray-50">
+                                        <p class="font-black uppercase text-gray-400 italic">Nenhuma candidatura recebida ainda.</p>
+                                    </div>
+                                `;
             }
 
             const body = `
-            <div class="p-1">
-                <div class="max-h-[450px] overflow-y-auto custom-scrollbar pr-2">
-                    ${applicationsHtml}
-                </div>
-            </div>
-        `;
+                                <div class="p-1">
+                                    <div class="max-h-[450px] overflow-y-auto custom-scrollbar pr-2">
+                                        ${applicationsHtml}
+                                    </div>
+                                </div>
+                            `;
 
             openModal(title, body);
         }
@@ -259,29 +260,29 @@
         function applyForJob(jobId) {
             const title = 'Formulário de Aplicação';
             const body = `
-                        <div class="p-2">
-                            <form id="applyForm" action="/applyjob/${jobId}" method="POST" onsubmit="return validarConfirmacao()">
-                                    <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                                    <div class="mb-4">
-                                        <label class="block mb-2 font-black uppercase text-sm" for="message">Deixe uma mensagem! (Opcional)</label>
-                                        <input type="text" id="message" name="message" 
-                                        placeholder="Olá, me chamo {{ Auth::check() ? Auth::user()->name : '' }}"
-                                        class="w-full p-2 border-4 border-black outline-none focus:bg-yellow-50 font-bold shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
-                                        <br><br>
-                                        <label class="block mb-2 font-black uppercase text-xs" for="confirmacaoInput">
-                                            Você concorda em realizar todas as atividades marcadas como obrigatórias?
-                                        </label>
-                                        <input type="text" id="confirmacaoInput" name="requiredConsentiment" 
-                                        placeholder="Digite 'SIM' para confirmar"
-                                        class="w-full p-2 border-4 border-black outline-none focus:bg-yellow-50 font-bold shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]" required>
-                                        <p id="errorMessage" class="text-red-600 font-black mt-2 hidden uppercase text-[10px]">Escreva 'SIM' em maiúsculo!</p>
-                                    </div>
-                                    <button type="submit" class="w-full p-3 bg-green-500 border-4 border-black font-black uppercase hover:bg-green-600 transition-colors shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
-                                        Confirmar Candidatura
-                                    </button>
-                                </form>
-                            </div>
-            `;
+                                            <div class="p-2">
+                                                <form id="applyForm" action="/applyjob/${jobId}" method="POST" onsubmit="return validarConfirmacao()">
+                                                        <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                                                        <div class="mb-4">
+                                                            <label class="block mb-2 font-black uppercase text-sm" for="message">Deixe uma mensagem! (Opcional)</label>
+                                                            <input type="text" id="message" name="message" 
+                                                            placeholder="Olá, me chamo {{ Auth::check() ? Auth::user()->name : '' }}"
+                                                            class="w-full p-2 border-4 border-black outline-none focus:bg-yellow-50 font-bold shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+                                                            <br><br>
+                                                            <label class="block mb-2 font-black uppercase text-xs" for="confirmacaoInput">
+                                                                Você concorda em realizar todas as atividades marcadas como obrigatórias?
+                                                            </label>
+                                                            <input type="text" id="confirmacaoInput" name="requiredConsentiment" 
+                                                            placeholder="Digite 'SIM' para confirmar"
+                                                            class="w-full p-2 border-4 border-black outline-none focus:bg-yellow-50 font-bold shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]" required>
+                                                            <p id="errorMessage" class="text-red-600 font-black mt-2 hidden uppercase text-[10px]">Escreva 'SIM' em maiúsculo!</p>
+                                                        </div>
+                                                        <button type="submit" class="w-full p-3 bg-green-500 border-4 border-black font-black uppercase hover:bg-green-600 transition-colors shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+                                                            Confirmar Candidatura
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                `;
             openModal(title, body);
         }
 

@@ -11,6 +11,32 @@ use Illuminate\Support\Facades\Auth;
 
 class JobController extends Controller
 {
+
+    public function index(Request $request)
+    {
+        $OfferJobs = self::getHomePageJobsOffers($request->get('filter'));
+
+        if (!auth()->check()) {
+            return view('home', compact('OfferJobs'));
+        }
+
+        $userJobs = self::getLoggedUserScheduledJobs();
+        $stats = self::getLoggedUserStats();
+
+        switch (auth()->user()->userType->key) {
+
+            case 'PROPERTY_OWNER':
+                // Retorna a view específica do proprietário dentro de subpastas
+                return view('property-owners.home', compact('OfferJobs', 'userJobs', 'stats'));
+
+            case 'PROFESSIONAL_CLEANER':
+            case 'ADMIN_ACCOUNT':
+            default:
+                // Retorna a view padrão da home (Profissional / Geral)
+                return view('home', compact('OfferJobs', 'userJobs', 'stats'));
+        }
+    }
+
     public static function getHomePageJobsOffers($filter = null)
     {
         $query = CleaningJob::with(['property', 'status'])
@@ -31,23 +57,36 @@ class JobController extends Controller
 
     public function getJobDetails($id)
     {
-        $job = CleaningJob::with([
-            'property.owner',
-            'status',
-            'applications.cleaner'
-        ])->findOrFail($id);
+        switch (auth()->user()->userType->key) {
+            case 'PROPERTY_OWNER':
+                $job = CleaningJob::with([
+                    'property.owner',
+                    'status',
+                    'applications.cleaner'
+                ])->findOrFail($id);
 
-        $rejectedCleaner = JobApplication::where('job_id', $id)
-            ->where('status', 'REJECTED')
-            ->where('cleaner_id', auth()->id());
+                $rejectedCleaner = JobApplication::where('job_id', $id)
+                    ->where('status', 'REJECTED')
+                    ->where('cleaner_id', auth()->id());
 
-        
-        if ($rejectedCleaner->exists()) {
-            $job->UserApplicationRejected = true;
-            // dd($rejectedCleaner, $job->UserApplicationRejected);
+
+                if ($rejectedCleaner->exists()) {
+                    $job->UserApplicationRejected = true;
+                    // dd($rejectedCleaner, $job->UserApplicationRejected);
+                }
+                return view('property-owners.job-manage', compact('job'));
+                break;
+            case 'PROFESSIONAL_CLEANER':
+                $job = CleaningJob::with([
+                    'property.owner',
+                    'status'
+                ])->findOrFail($id);
+                return view('job-details', compact('job'));
+                break;
+            default:
+                // fallback sei la af sksksks '-'
+                break;
         }
-
-        return view('job-details', compact('job'));
     }
 
     public static function getLoggedUserScheduledJobs()
@@ -126,7 +165,7 @@ class JobController extends Controller
 
     public function create()
     {
-        $properties = Property::where('user_id', auth()->id())->get();
+        $properties = Property::where('owner_user_id', auth()->id())->get();
         return view('job-create', compact('properties'));
     }
 
