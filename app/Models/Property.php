@@ -7,9 +7,18 @@ use Illuminate\Database\Eloquent\Model;
 class Property extends Model
 {
 
-    public function Owner()
+    protected $fillable = [
+        'name',
+        'address',
+        'city',
+        'postal_code',
+        'owner_user_id',
+        'rating'
+    ];
+
+    public function owner()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'owner_user_id');
     }
 
 }

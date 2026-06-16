@@ -8,7 +8,9 @@ class CleaningJob extends Model
 {
     protected $casts = [
         'tasks' => 'array',
-        'scheduled_at' => 'datetime',
+        'scheduled_date' => 'date',
+        'scheduled_arrival_time_minimum' => 'datetime',
+        'completed_at' => 'datetime',
     ];
     public function property()
     {
@@ -27,6 +29,6 @@ class CleaningJob extends Model
 
     public function applications()
     {
-        return $this->hasMany(JobApplication::class, 'job_id');
+        return $this->hasMany(JobApplication::class, 'job_id')->where('status', 'PENDING');
     }
 }

@@ -16,7 +16,7 @@ class CleaningJobSeeder extends Seeder
     {
         CleaningJob::create([
             'property_id' => 1,
-            'scheduled_at' => now()->addDays(3),
+            'scheduled_date' => now()->addDays(3),
             'is_completed' => false,
             'status_id' => 1
         ]);
@@ -24,7 +24,7 @@ class CleaningJobSeeder extends Seeder
         CleaningJob::create([
             'property_id' => 2,
             'cleaner_user_id' => 2,
-            'scheduled_at' => now()->addDays(3),
+            'scheduled_date' => now()->addDays(3),
             'is_completed' => false,
             'status_id' => 1
         ]);

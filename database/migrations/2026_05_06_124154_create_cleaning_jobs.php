@@ -14,7 +14,10 @@ return new class extends Migration {
             $table->id();
             $table->integer('property_id');
             $table->integer('cleaner_user_id')->nullable();
-            $table->dateTime('scheduled_at')->nullable();
+            $table->date('scheduled_date')->nullable();
+            $table->dateTime('scheduled_arrival_time_minimum')->nullable();
+            $table->dateTime('completed_at')->nullable();
+            $table->dateTime('start_at')->nullable();
             $table->json('tasks')->nullable();
             $table->boolean('is_completed')->default(false);
             $table->integer('status_id')->default(0);

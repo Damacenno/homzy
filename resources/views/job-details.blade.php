@@ -24,7 +24,7 @@
                 <div
                     class="relative grid grid-cols-4 grid-rows-2 gap-2 h-[30rem] bg-black border-4 border-black overflow-hidden">
                     @php
-                        $fotos = [1, 2, 3, 4, 5]; 
+                        $fotos = [1, 2, 3, 4, 5];
                     @endphp
 
                     @foreach ($fotos as $index => $foto)
@@ -48,7 +48,6 @@
                 </div>
             </div>
 
-            <!-- Descrição -->
             <div class="border-4 border-black bg-white p-6 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] flex-grow">
                 <h2 class="text-2xl font-black uppercase mb-4 underline decoration-yellow-400">Descrição do Imóvel</h2>
                 <p class="font-bold text-gray-800 leading-relaxed">
@@ -59,22 +58,21 @@
 
         <!-- Tarefas e Ação -->
         <div class="flex flex-col gap-6 h-full">
-
-            <!-- Bloco da Lista de tarefas-->
             <div class="border-4 border-black bg-white p-6 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] flex-grow">
                 <h2 class="text-xl font-black uppercase mb-6 border-b-4 border-black pb-2 inline-block">
                     Checklist de Limpeza
                 </h2>
 
                 <div class="space-y-4">
-                    @if(!empty($job->tasks) && is_array($job->tasks))
+                    @if (!empty($job->tasks) && is_array($job->tasks))
                         @foreach (array_slice($job->tasks, 0, 3) as $task)
                             <div
                                 class="flex items-center gap-3 p-3 border-2 border-black bg-gray-50 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] relative overflow-hidden">
 
                                 <!-- Checkbox  -->
-                                <div class="w-6 h-6 border-2 border-black flex-shrink-0 bg-white flex items-center justify-center">
-                                    @if($task['is_required'])
+                                <div
+                                    class="w-6 h-6 border-2 border-black flex-shrink-0 bg-white flex items-center justify-center">
+                                    @if ($task['is_required'])
                                         <div class="w-3 h-3 bg-red-500"></div>
                                     @else
                                         <div class="w-3 h-3 bg-black opacity-20"></div>
@@ -86,7 +84,7 @@
                                         {{ $task['task'] }}
                                     </span>
 
-                                    @if($task['is_required'])
+                                    @if ($task['is_required'])
                                         <span class="text-[9px] font-black uppercase text-red-500 tracking-tighter">
                                             [ Obrigatório ]
                                         </span>
@@ -94,7 +92,7 @@
                                 </div>
 
                                 <!-- importancia -->
-                                @if($task['importance_level'] >= 7)
+                                @if ($task['importance_level'] >= 7)
                                     <div
                                         class="absolute -right-1 -top-1 bg-yellow-400 border-l-2 border-b-2 border-black px-2 py-0.5 text-[8px] font-black uppercase">
                                         Prioridade {{ $task['importance_level'] }}
@@ -103,7 +101,7 @@
                             </div>
                         @endforeach
 
-                        @if(count($job->tasks) > 3)
+                        @if (count($job->tasks) > 3)
                             <div class="w-full flex justify-center mt-4">
                                 <span
                                     class="font-black uppercase text-xs bg-black text-white px-2 py-1 shadow-[2px_2px_0px_0px_rgba(250,204,21,1)]">
@@ -133,7 +131,6 @@
                 </div>
             </div>
 
-            <!-- Card de Ação / Status -->
             <div class="border-4 border-black bg-white p-6 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
                 <div class="space-y-4">
                     <div
@@ -144,15 +141,25 @@
 
                     <div
                         class="bg-white border-2 border-black p-2 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] flex justify-between items-center">
-                        <p class="text-[10px] font-black uppercase text-gray-500">Data e Hora</p>
-                        <p class="text-xs font-black">{{ \Carbon\Carbon::parse($job->scheduled_at)->format('d/m/Y H:i') }}
+                        <p class="text-[10px] font-black uppercase text-gray-500">Data programada</p>
+                        <p class="text-xs font-black">{{ \Carbon\Carbon::parse($job->scheduled_date)->format('d/m/Y') }}
                         </p>
+                        <p class="text-[10px] font-black uppercase text-gray-500">Hora mínima de chegada</p>
+                        <p class="text-xs font-black">
+                            {{ \Carbon\Carbon::parse($job->scheduled_arrival_time_minimum)->format('H:i') }}</p>
                     </div>
 
                     @if (Auth::check())
+                        
                         @if ($job->cleaner_user_id === auth()->id())
-                            <div class="bg-green-500 text-white p-3 border-2 border-black text-center font-black uppercase text-xs">
+                            <div
+                                class="bg-green-500 text-white p-3 border-2 border-black text-center font-black uppercase text-xs">
                                 VOCÊ É O RESPONSÁVEL 🧹
+                            </div>
+
+                            <div
+                                class="bg-blue-500 text-white p-3 border-2 border-black text-center font-black uppercase text-xs">
+
                             </div>
                         @elseif($job->property->owner_user_id === auth()->id())
                             <button onclick="manageJob({{ $job->id }})"
@@ -182,7 +189,6 @@
     </div>
 
     <script>
-
         function manageJob(jobId) {
             const title = 'Painel do Proprietário';
 
@@ -263,7 +269,7 @@
                                         class="w-full p-2 border-4 border-black outline-none focus:bg-yellow-50 font-bold shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
                                         <br><br>
                                         <label class="block mb-2 font-black uppercase text-xs" for="confirmacaoInput">
-                                            Você concorda em realizar todas as atividades exigidas?
+                                            Você concorda em realizar todas as atividades marcadas como obrigatórias?
                                         </label>
                                         <input type="text" id="confirmacaoInput" name="requiredConsentiment" 
                                         placeholder="Digite 'SIM' para confirmar"
