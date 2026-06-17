@@ -20,20 +20,26 @@ class JobController extends Controller
             return view('home', compact('OfferJobs'));
         }
 
-        $userJobs = self::getLoggedUserScheduledJobs();
         $stats = self::getLoggedUserStats();
 
         switch (auth()->user()->userType->key) {
 
             case 'PROPERTY_OWNER':
-                // Retorna a view específica do proprietário dentro de subpastas
-                return view('property-owners.home', compact('OfferJobs', 'userJobs', 'stats'));
+                // Retorna a view específica do proprietário
+                $OwnercleaningJobs = CleaningJob::with(['property', 'status'])
+                    ->whereHas('property', function ($query) {
+                        $query->where('owner_user_id', auth()->id());
+                    })->get();
+
+                return view('property-owners.home', compact('OwnercleaningJobs'));
 
             case 'PROFESSIONAL_CLEANER':
+                // ADICIONA ALGO SE PRECISAR, MAS POR ENQUANTO SÓ RETORNA A VIEW NORMAL no case default
             case 'ADMIN_ACCOUNT':
             default:
-                // Retorna a view padrão da home (Profissional / Geral)
-                return view('home', compact('OfferJobs', 'userJobs', 'stats'));
+                // Retorna a view padrão da home
+                $userJobs = self::getLoggedUserScheduledJobs();
+                return view('professional-cleaners.home', compact('OfferJobs', 'userJobs', 'stats'));
         }
     }
 
@@ -81,7 +87,7 @@ class JobController extends Controller
                     'property.owner',
                     'status'
                 ])->findOrFail($id);
-                return view('job-details', compact('job'));
+                return view('professional-cleaners.job-details', compact('job'));
                 break;
             default:
                 // fallback sei la af sksksks '-'
@@ -166,7 +172,7 @@ class JobController extends Controller
     public function create()
     {
         $properties = Property::where('owner_user_id', auth()->id())->get();
-        return view('job-create', compact('properties'));
+        return view('property-owners.job-create', compact('properties'));
     }
 
     public function store(Request $request)
