@@ -17,11 +17,15 @@ Homzy oferece:
 
 ## Imagens do Sistema
 
-<h2>Página Inicial</h2>
+<h4>Página Inicial</h2>
 <img width="1898" height="939" alt="image" src="https://github.com/user-attachments/assets/31749ba4-bbf2-4db2-b0a9-4c608838c021" /> 
 
-<h2>Detalhes do Serviço</h2>
+<h4>Detalhes do Serviço</h2>
 <img width="1900" height="937" alt="image" src="https://github.com/user-attachments/assets/da3bf28f-8816-4bb4-984b-0047f47b24df" />
+
+<h4>Gerenciamento do Serviço</h4>
+<img width="1890" height="942" alt="image" src="https://github.com/user-attachments/assets/d7a12351-d2b8-46f8-9a80-7ff67f466ac4" />
+
 
 ---
 
