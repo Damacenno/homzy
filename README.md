@@ -15,11 +15,13 @@ Homzy oferece:
 
 ---
 
-## Placeholder de Imagens
+## Imagens do Sistema
 
-| Página inicial | Detalhes do serviço |
-|---------------|-------|---------------------|
-| ![Home]<img width="1898" height="939" alt="image" src="https://github.com/user-attachments/assets/31749ba4-bbf2-4db2-b0a9-4c608838c021" /> | ![Job Details]<img width="1900" height="937" alt="image" src="https://github.com/user-attachments/assets/da3bf28f-8816-4bb4-984b-0047f47b24df" /> |
+<h2>Página Inicial</h2>
+<img width="1898" height="939" alt="image" src="https://github.com/user-attachments/assets/31749ba4-bbf2-4db2-b0a9-4c608838c021" /> 
+
+<h2>Detalhes do Serviço</h2>
+<img width="1900" height="937" alt="image" src="https://github.com/user-attachments/assets/da3bf28f-8816-4bb4-984b-0047f47b24df" />
 
 ---
 
