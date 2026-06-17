@@ -19,7 +19,7 @@ Homzy oferece:
 
 | Página inicial | Login | Detalhes do serviço |
 |---------------|-------|---------------------|
-| ![Home](COLOQUE_AQUI_O_LINK_DA_IMAGEM_HOME) | ![Login](COLOQUE_AQUI_O_LINK_DA_IMAGEM_LOGIN) | ![Job Details](COLOQUE_AQUI_O_LINK_DA_IMAGEM_JOB_DETAILS) |
+| ![Home](<img width="1898" height="939" alt="image" src="https://github.com/user-attachments/assets/31749ba4-bbf2-4db2-b0a9-4c608838c021" />) | ![Job Details](<img width="1900" height="937" alt="image" src="https://github.com/user-attachments/assets/da3bf28f-8816-4bb4-984b-0047f47b24df" />) |
 
 ---
 
