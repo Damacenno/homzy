@@ -17,7 +17,7 @@ class JobController extends Controller
         $OfferJobs = self::getHomePageJobsOffers($request->get('filter'));
 
         if (!auth()->check()) {
-            return view('home', compact('OfferJobs'));
+            return view('landing-page', compact('OfferJobs'));
         }
 
         $stats = self::getLoggedUserStats();
@@ -34,7 +34,7 @@ class JobController extends Controller
                 return view('property-owners.home', compact('OwnercleaningJobs'));
 
             case 'PROFESSIONAL_CLEANER':
-                // ADICIONA ALGO SE PRECISAR, MAS POR ENQUANTO SÓ RETORNA A VIEW NORMAL no case default
+            // ADICIONA ALGO SE PRECISAR, MAS POR ENQUANTO SÓ RETORNA A VIEW NORMAL no case default
             case 'ADMIN_ACCOUNT':
             default:
                 // Retorna a view padrão da home
@@ -71,15 +71,6 @@ class JobController extends Controller
                     'applications.cleaner'
                 ])->findOrFail($id);
 
-                $rejectedCleaner = JobApplication::where('job_id', $id)
-                    ->where('status', 'REJECTED')
-                    ->where('cleaner_id', auth()->id());
-
-
-                if ($rejectedCleaner->exists()) {
-                    $job->UserApplicationRejected = true;
-                    // dd($rejectedCleaner, $job->UserApplicationRejected);
-                }
                 return view('property-owners.job-manage', compact('job'));
                 break;
             case 'PROFESSIONAL_CLEANER':

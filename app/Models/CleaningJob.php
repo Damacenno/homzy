@@ -29,6 +29,6 @@ class CleaningJob extends Model
 
     public function applications()
     {
-        return $this->hasMany(JobApplication::class, 'job_id')->where('status', 'PENDING');
+        return $this->hasMany(JobApplication::class, 'job_id');
     }
 }
